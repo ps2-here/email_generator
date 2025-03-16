@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Email Log{% endblock %}
+
+{% block content %}
+<h2>Sent Emails Log</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Recipient</th>
+            <th>Subject</th>
+            <th>Message</th>
+            <th>Trigger Type</th>
+            <th>Sent Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for email in emails %}
+        <tr>
+            <td>{{ email.recipient }}</td>
+            <td>{{ email.subject }}</td>
+            <td>{{ email.message }}</td>
+            <td>{{ email.trigger_type }}</td>
+            <td>{{ email.sent_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('main.index') }}">Back to Home</a>
+{% endblock %}

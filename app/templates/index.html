@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Email Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Automated Email Generator</h1>
+    </header>
+    
+    <main>
+        <section id="email-form">
+            <h2>Create Email</h2>
+            <form id="create-email" action="{{ url_for('main.send_email') }}" method="POST">
+                <label for="recipient">Recipient Email:</label>
+                <input type="email" id="recipient" name="recipient" required>
+
+                <label for="subject">Subject:</label>
+                <input type="text" id="subject" name="subject" required>
+
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea>
+
+                <label for="trigger-type">Trigger Type:</label>
+                <select id="trigger-type" name="trigger-type" required>
+                    <option value="time-based">Time-Based</option>
+                    <option value="event-based">Event-Based</option>
+                </select>
+
+                <div id="time-settings" style="display: none;">
+                    <label for="send-time">Send Time:</label>
+                    <input type="datetime-local" id="send-time" name="send-time">
+                </div>
+
+                <div id="event-settings" style="display: none;">
+                    <label for="event-name">Event Name:</label>
+                    <input type="text" id="event-name" name="event-name">
+                </div>
+
+                <button type="submit">Schedule Email</button>
+            </form>
+        </section>
+
+        <section id="log">
+            <h2>Sent Emails Log</h2>
+            <table id="email-log">
+                <thead>
+                    <tr>
+                        <th>Recipient</th>
+                        <th>Subject</th>
+                        <th>Message</th>
+                        <th>Trigger Type</th>
+                        <th>Sent Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for email in emails %}
+                    <tr>
+                        <td>{{ email.recipient }}</td>
+                        <td>{{ email.subject }}</td>
+                        <td>{{ email.message }}</td>
+                        <td>{{ email.trigger_type }}</td>
+                        <td>{{ email.sent_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Automated Email Generator</p>
+    </footer>
+
+    <script>
+        // Show/hide settings based on trigger type
+        document.getElementById('trigger-type').addEventListener('change', function() {
+            const timeSettings = document.getElementById('time-settings');
+            const eventSettings = document.getElementById('event-settings');
+            if (this.value === 'time-based') {
+                timeSettings.style.display = 'block';
+                eventSettings.style.display = 'none';
+            } else if (this.value === 'event-based') {
+                timeSettings.style.display = 'none';
+                eventSettings.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
